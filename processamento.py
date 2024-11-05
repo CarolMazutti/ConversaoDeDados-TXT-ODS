@@ -1,16 +1,24 @@
 import pandas as pd
 import os
 import tkinter as tk
-from tkinter import simpledialog
+from tkinter import simpledialog, filedialog, messagebox  
 
-# Caminhos para os arquivos de entrada e saída
-arquivo_txt = '\\\\192.168.1.142\\Geral\\PROGRAMAS\\Importações\\dados_cliente.001'
-arquivo_ods = '\\\\192.168.1.142\\Geral\\PROGRAMAS\\Importações\\dados_tratados.ods'
+# Criar uma janela para solicitar o arquivo .txt
+root = tk.Tk()
+root.withdraw()  # Oculta a janela principal
+
+# Exibir uma mensagem para o usuário
+if messagebox.askokcancel("Escolha o arquivo", "Escolha o arquivo"):
+# Solicitar ao usuário que escolha o arquivo .txt
+    arquivo_txt = filedialog.askopenfilename(title="Selecione o arquivo", filetypes=[("Text Files", "*.001")])
 
 # Verificar se o arquivo .txt existe antes de processar
 if not os.path.exists(arquivo_txt):
     print(f"Erro: O arquivo {arquivo_txt} não foi encontrado.")
 else:
+    # Caminho para o arquivo de saída
+    arquivo_ods = '\\\\192.168.1.142\\Geral\\PROGRAMAS\\Importações\\dados_tratados.ods'
+    
     # Função para ler o arquivo .txt e extrair dados com base nas posições de caracteres
     def processamento(arquivo_txt, arquivo_ods):
         # Criar uma janela para solicitar ALIQ e TIPO DE SERVIÇO
