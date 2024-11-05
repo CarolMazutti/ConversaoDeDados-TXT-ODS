@@ -16,11 +16,9 @@ if messagebox.askokcancel("Escolha o arquivo", "Escolha o arquivo"):
 if not os.path.exists(arquivo_txt):
     print(f"Erro: O arquivo {arquivo_txt} não foi encontrado.")
 else:
-    # Caminho para o arquivo de saída
-    arquivo_ods = '\\\\192.168.1.142\\Geral\\PROGRAMAS\\Importações\\dados_tratados.ods'
     
     # Função para ler o arquivo .txt e extrair dados com base nas posições de caracteres
-    def processamento(arquivo_txt, arquivo_ods):
+    def processamento(arquivo_txt):
         # Criar uma janela para solicitar ALIQ e TIPO DE SERVIÇO
         root = tk.Tk()
         root.withdraw()  # Oculta a janela principal
@@ -42,7 +40,7 @@ else:
         label = tk.Label(processamento_janela, text="Em processamento...", padx=20, pady=20)
         label.pack()
         processamento_janela.update()  # Atualiza a janela para exibir a mensagem
-    # Lista para armazenar os dados
+        # Lista para armazenar os dados
         dados = []
 
         # Ler o arquivo txt
@@ -84,10 +82,20 @@ else:
         df['ALIQ'] = df['ALIQ'].astype(str).str.replace('.', ',')
         df['ICMS'] = df['ICMS'].astype(str).str.replace('.', ',')
 
-        # Salvar o DataFrame em um arquivo .ods
-        df.to_excel(arquivo_ods, engine='odf', index=False)
+
+        # Exibir mensagem para o usuário
+        if messagebox.askokcancel("Salvar Arquivo", "Selecione a pasta onde deseja salvar o arquivo"):
+            # Solicitar ao usuário que escolha a pasta
+            pasta_destino = filedialog.askdirectory(title="Selecione a pasta de destino")
+            if pasta_destino:
+                # Criar o caminho completo do arquivo .ods na pasta selecionada
+                caminho_arquivo = os.path.join(pasta_destino, 'dados_tratados.ods')
+                df.to_excel(caminho_arquivo, engine='odf', index=False)
+                messagebox.showinfo("Sucesso", f"Arquivo salvo em: {caminho_arquivo}")
+            else:
+                messagebox.showwarning("Aviso", "Nenhuma pasta foi selecionada.")
 
         processamento_janela.destroy()
 
     # Executar a função
-    processamento(arquivo_txt, arquivo_ods)
+    processamento(arquivo_txt)
