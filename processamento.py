@@ -18,7 +18,9 @@ else:
         root.withdraw()  # Oculta a janela principal
 
         # Solicitar alíquota
-        aliq = simpledialog.askfloat("Entrada de Dados", "Informe a alíquota (sem %):")  # Não multiplica por 100 aqui
+        aliq_input = simpledialog.askstring("Entrada de Dados", "Informe a alíquota (sem %):") 
+        aliq_input = aliq_input.replace('.', ',')
+        aliq = float(aliq_input.replace(',', '.'))
 
         # Formatar a alíquota para ter duas casas decimais
         aliq_formatado = f"{aliq:.2f}".replace('.', ',')
