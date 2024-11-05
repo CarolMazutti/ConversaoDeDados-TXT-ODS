@@ -33,19 +33,24 @@ def processamento(arquivo_txt):
             valor = linha[135:147].strip()
             base = linha[147:159].strip()
 
+            # Adicionar a vírgula nos valores de VALOR e BASE
+            valor_formatado = valor[:-2] + ',' + valor[-2:]  # Adiciona vírgula antes dos últimos dois caracteres
+            base_formatado = base[:-2] + ',' + base[-2:]
+
             # Converter a data para o formato dd/mm/aaaa
             data_formatada = pd.to_datetime(data, format='%Y%m%d').strftime('%d/%m/%Y')
 
             # Adicionar os dados extraídos à lista
-            dados.append([cpf_cnpj, data_formatada, nf, valor, base])
+            dados.append([cpf_cnpj, data_formatada, nf, valor_formatado, base_formatado])
 
-    # Calcular ICMS e adicionar as novas colunas
-    for i in range(len(dados)):
-        base_valor = float(dados[i][4]) / 100  # Converter BASE para float
-        icms = base_valor * aliq / 100  # Calcular ICMS
+        # Calcular ICMS e adicionar as novas colunas
+        for i in range(len(dados)):
+            # Remover a vírgula e converter BASE para float
+            base_valor = float(dados[i][4].replace(',', '.'))  # Converter BASE para float
+            icms = base_valor * aliq / 100 # Calcular ICMS
 
-        # Adicionar ALIQ, ICMS e TIPO DE SERVIÇO
-        dados[i].extend([aliq_formatado, f"{icms:.2f}".replace('.', ','), tipo_servico])
+            # Adicionar ALIQ, ICMS e TIPO DE SERVIÇO
+            dados[i].extend([aliq_formatado, f"{icms:.2f}".replace('.', ','), tipo_servico])
 
     # Criar um DataFrame com os dados
     df = pd.DataFrame(dados, columns=['CPF/CNPJ', 'DATA', 'NF', 'VALOR', 'BASE', 'ALIQ', 'ICMS', 'TIPO DE SERVIÇO'])
