@@ -120,7 +120,7 @@ def selecionar_arquivo():
     if messagebox.askokcancel("Escolha o arquivo", "Clique em OK para escolher o arquivo"):
         # Solicitar ao usuário que escolha o arquivo .txt
         arquivo_txt = filedialog.askopenfilename(
-            title="Selecione o arquivo", filetypes=[("Text Files", "*.001"), ("Text Files", "*.057")])
+            title="Selecione o arquivo", filetypes=[("Text Files", "*.001"), ("Text Files", "*.057"), ("Text Files", "*.007")])
 
         # Verificar se o arquivo .txt existe antes de processar
         if not os.path.exists(arquivo_txt):
